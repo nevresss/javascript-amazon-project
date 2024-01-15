@@ -1,4 +1,4 @@
-import { cart, addToCart } from '../data/cart.js';
+import { cart, addToCart, updateCheckout } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrenncy } from './utils/money.js';
 
@@ -71,9 +71,9 @@ function updateCartQunatity(productId){
     cart.forEach((cartItem)=>{
         cartQuantity += cartItem.quantity;
     })
-
+    
     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-
+   
     document.querySelector(`.js-added-to-cart-${productId}`).classList.add('visible-added-to-cart');
     
     const previousTimeoutId = addedMessageTimeout[productId];
