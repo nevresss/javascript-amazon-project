@@ -80,17 +80,23 @@ export function updateQunatity(productId, newQuantity){
     saveToStorage();
 }
 
-export function updateDeliveryOption(productId, deliveryOptionId){
+export function updateDeliveryOption(productId, deliveryOptionId) {
+    console.log('productId:', productId);
+    console.log('deliveryOptionId:', deliveryOptionId);
 
     let matchingItem;
 
-    cart.forEach((cartItem)=>{
-        if(productId === cartItem.productId){
+    cart.forEach((cartItem) => {
+        if (productId === cartItem.productId) {
             matchingItem = cartItem;
         }
     });
 
-    matchingItem.deliveryOptionId = deliveryOptionId;
-
-    saveToStorage();
+    if (matchingItem) {
+        matchingItem.deliveryOptionId = deliveryOptionId;
+        saveToStorage();
+    } else {
+        console.error(`Product with ID ${productId} not found in the cart.`);
+    }
 }
+

@@ -1,9 +1,10 @@
 import {cart, removeFromCart, updateCheckout, updateQunatity, updateDeliveryOption} from '../../data/cart.js';
-import { products } from '../../data/products.js';
+import { products, getProduct } from '../../data/products.js';
 import { formatCurrenncy } from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import { deliveryOptions } from '../../data/deliveryOption.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOption.js';
+import {renderPaymentSummary} from './paymentSummary.js';
 
 hello();
 
@@ -18,23 +19,11 @@ export function renderOrderSummary(){
 
         const productId = cartItem.productId;
 
-        let matchingProduct;
-
-        products.forEach((product)=>{
-            if(product.id === productId){
-                matchingProduct = product;
-            }
-        });
+        const matchingProduct = getProduct(productId);
 
         const deliveryOptionId = cartItem.deliveryOptionId;
         
-        let deliveryOption;
-
-        deliveryOptions.forEach((option)=>{
-            if(option.id === deliveryOptionId){
-                deliveryOption = option;
-            }
-        });
+        const deliveryOption = getDeliveryOption(deliveryOptionId);
 
         const today = dayjs();
         const deliveryDate = today.add(
@@ -121,7 +110,7 @@ export function renderOrderSummary(){
                     </div>
                 </div>
             </div>
-            `;
+            `
         });
         return html;
     }
@@ -171,11 +160,24 @@ export function renderOrderSummary(){
         });
     });
 
-    document.querySelectorAll('.js-delivery-option').forEach((element)=>{
-        element.addEventListener('click', ()=>{
-            const { productId, deliveryOptionId } = element.dataset;
-            updateDeliveryOption(productId, deliveryOptionId);
-            renderOrderSummary();
+    document.querySelectorAll('.js-delivery-option').forEach((element) => {
+        element.addEventListener('click', () => {
+            const inputElement = element.querySelector('input');
+            if (inputElement) {
+                const productId = inputElement.dataset.productId;
+                const deliveryOptionId = inputElement.dataset.deliveryOptionId;
+                if (productId && deliveryOptionId) {
+                    updateDeliveryOption(productId, deliveryOptionId);
+                    renderOrderSummary();
+                } else {
+                    console.error('Missing data attributes (productId or deliveryOptionId).');
+                }
+            } else {
+                console.error('Input element not found within the delivery option.');
+            }
         });
     });
+    
+    
+    
 }
