@@ -6,11 +6,6 @@ import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOption.js';
 import {renderPaymentSummary} from './paymentSummary.js';
 
-hello();
-
-const today = dayjs();
-console.log(today.format('dddd, MMMM D'));
-
 export function renderOrderSummary(){
 
     let cartSummary = '';
@@ -123,6 +118,8 @@ export function renderOrderSummary(){
             removeFromCart(productId);
 
             document.querySelector(`.js-cart-container-${productId}`).remove();
+
+            renderPaymentSummary();
         });
     });
 
@@ -169,6 +166,7 @@ export function renderOrderSummary(){
                 if (productId && deliveryOptionId) {
                     updateDeliveryOption(productId, deliveryOptionId);
                     renderOrderSummary();
+                    renderPaymentSummary();
                 } else {
                     console.error('Missing data attributes (productId or deliveryOptionId).');
                 }
