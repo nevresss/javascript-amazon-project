@@ -1,6 +1,6 @@
 import {cart, removeFromCart, updateCheckout, updateQunatity, updateDeliveryOption} from '../../data/cart.js';
 import { products, getProduct } from '../../data/products.js';
-import { formatCurrenncy } from '../utils/money.js';
+import formatCurrenncy from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOption.js';
@@ -32,7 +32,7 @@ export function renderOrderSummary(){
 
         cartSummary +=
         `
-        <div class="cart-item-container js-cart-container-${matchingProduct.id}">
+        <div class="cart-item-container js-cart-item-container js-cart-container-${matchingProduct.id}">
             <div class="delivery-date">
                 Delivery date: ${dateString}
             </div>
@@ -48,7 +48,7 @@ export function renderOrderSummary(){
                 <div class="product-price">
                     $${formatCurrenncy(matchingProduct.priceCents)}
                 </div>
-                <div class="product-quantity">
+                <div class="product-quantity js-product-quantity-${matchingProduct.id}">
                     <span> 
                         Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
                     </span>
@@ -57,7 +57,7 @@ export function renderOrderSummary(){
                     </span>
                     <input class="js-quantity-input-${matchingProduct.id} quantity-input">
                     <span class="js-save-quantity-link save-quantity-link link-primary" data-product-id="${matchingProduct.id}">Save</span>
-                    <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
+                    <span class="delete-quantity-link link-primary js-delete-link js-delete-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
                     Delete
                     </span>
                 </div>
@@ -174,8 +174,5 @@ export function renderOrderSummary(){
                 console.error('Input element not found within the delivery option.');
             }
         });
-    });
-    
-    
-    
+    });  
 }
